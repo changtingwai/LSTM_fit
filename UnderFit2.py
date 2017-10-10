@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#欠拟合模型就是在训练集上表现良好而在测试集上性能较差的模型。
+#另外，如果模型在训练集上的性能比验证集上的性能好，并且模型性能曲线已经平稳了，那么这个模型也可能欠拟合。下面就是一个缺乏足够的记忆单元的欠拟合模型的例子。
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import LSTM
@@ -23,16 +23,16 @@ def get_val():
 
 #define model
 model = Sequential()
-model.add(LSTM(10, input_shape=(1, 1)))
+model.add(LSTM(1, input_shape=(1, 1)))
 model.add(Dense(1, activation='linear'))
 
 #compile model
-model.compile('adam', 'mse')
+model.compile('sgd', 'mse')
 
 #fit model
 X, y = get_train()
 valX, valY = get_val()
-history = model.fit(X, y, epochs=100, validation_data=(valX, valY), shuffle= False)
+history = model.fit(X, y, epochs=300, validation_data=(valX, valY), shuffle= False)
 
 #plot train and val loss
 pyplot.plot(history.history['loss'])
